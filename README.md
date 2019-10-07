@@ -33,11 +33,10 @@ space = {
     'units1': hp.choice('units1', [80]),
     'batch_size': hp.quniform('batch_size', 0, 1000, 25)  #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
     }
-# Space for BO, gridSearch Space quniform is discrete uniform distribution (always starts at 0)
-
-# the main function defines which kind of search is done (gridSearch or BO (random also possible))
-# Once the programm starts every new trial/evaluation is saved in a trials object in the trials folder
-# program can be stopped at anytime and continued all progress will be saved in trials object
+Space for BO, gridSearch Space quniform is discrete uniform distribution (always starts at 0)
+the main function defines which kind of search is done (gridSearch or BO (random also possible))
+Once the programm starts every new trial/evaluation is saved in a trials object in the trials folder
+program can be stopped at anytime and continued all progress will be saved in trials object
 
 if __name__ == "__main__":
     while True:
