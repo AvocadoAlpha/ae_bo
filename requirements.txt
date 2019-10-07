@@ -1,0 +1,8 @@
+seaborn
+pandas
+numpy
+keras
+matplotlib
+hyperopt
+gpustat
+tensorflow-gpu==1.14
