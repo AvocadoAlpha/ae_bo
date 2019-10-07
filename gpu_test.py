@@ -8,3 +8,8 @@ c = tf.matmul(a, b)
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 # Runs the op.
 print(sess.run(c))
+
+print(tf.test.is_gpu_available(
+    cuda_only=False,
+    min_cuda_compute_capability=None
+))
