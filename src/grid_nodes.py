@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_medium_2()
+x_train, x_val, x_test = utils.generate_data_small()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
