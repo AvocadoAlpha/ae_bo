@@ -156,7 +156,7 @@ def run_trials(script_name, space, objective):
     except:  # create a new trials object and start searching
         trials = Trials()
 
-    best = fmin(objective, space, algo=rand.suggest, trials=trials, max_evals=max_trials)
+    best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=max_trials)
 
     print("Best:", best)
     print("SpaceEval" + str(space_eval(space, trials.argmin)))
