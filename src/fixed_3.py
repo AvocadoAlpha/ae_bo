@@ -16,19 +16,19 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
+x_train, x_val, x_test = utils.generate_data_medium2()
 
 space = {
     'units1': hp.quniform('units1', 0, 100, 4), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
     'units2': hp.quniform('units2', 0, 100, 4), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [256])
+    'batch_size': hp.choice('batch_size', [128])
     }
 
 space_str = """
 space = {
     'units1': hp.quniform('units1', 0, 100, 4), 
     'units2': hp.quniform('units2', 0, 100, 4), 
-    'batch_size': hp.choice('batch_size', [256])
+    'batch_size': hp.choice('batch_size', [128])
     }"""
 
 

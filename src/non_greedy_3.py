@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
+x_train, x_val, x_test = utils.generate_data_medium2()
 
 def node_params(n_layers):
     # define the parameters that are conditional on the number of layers here
@@ -29,12 +29,12 @@ def node_params(n_layers):
 layer_options = [1,2]
 
 space = {'choice': hp.choice('layers', [node_params(n) for n in layer_options]),
-        'batch_size': hp.choice('batch_size', [256])
+        'batch_size': hp.choice('batch_size', [128])
          }
 
 space_str = """
 space = {'choice': hp.choice('layers', [node_params(n) for n in layer_options]),
-        'batch_size': hp.choice('batch_size', [256])
+        'batch_size': hp.choice('batch_size', [128])
          }"""
 
 
