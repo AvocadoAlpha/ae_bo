@@ -5,7 +5,7 @@ set_gpu(sys.argv)
 from keras.models import Model
 from keras.layers import Dense, Input
 from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials, space_eval
-from keras.losses import mean_squared_error
+from keras.losses import mean_squared_error, binary_crossentropy
 import tensorflow as tf
 from keras import backend as K
 from keras import regularizers
@@ -69,7 +69,7 @@ def objective(params):
                     callbacks =utils.callback(script_name))
 
     preds = model.predict(x_test)
-    loss = tf.keras.backend.sum(mean_squared_error(tf.convert_to_tensor(x_test), tf.convert_to_tensor(preds)))
+    loss = tf.keras.backend.sum(binary_crossentropy(tf.convert_to_tensor(x_test), tf.convert_to_tensor(preds)))
     sess = tf.Session()
     loss = sess.run(loss)
     score = round(loss / (len(x_test)), 4)
