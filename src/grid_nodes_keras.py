@@ -1,4 +1,3 @@
-import sys
 from utils import set_gpu
 import sys
 set_gpu(sys.argv)
