@@ -79,4 +79,4 @@ def objective(params):
 # loop indefinitely and stop whenever you like
 if __name__ == "__main__":
     while True:
-        utils.run_trials_grid_2(script_name, space, objective)
+        utils.run_trials(script_name, space, objective)
