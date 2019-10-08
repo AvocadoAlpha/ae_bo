@@ -9,10 +9,13 @@ from hyperopt import space_eval
 import utils
 
 
-openF = "grid_nodes_keras"#sys.argv[1]
+openF = "grid_nodes"#sys.argv[1]
+
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
 init(openF)
+header = "\ntrain: "+str(len(module.x_train)) + "\nval: " + str(len(module.x_val)) + "\ntest: "+str(len(module.x_test))+"\n"
+
 
 
 def my_space_eval(vals):
@@ -47,7 +50,6 @@ table, n = options[openF]()
 
 x = [x[xaxe] for x in table] #populate graph!
 y = [x['loss'] for x in table]
-
 """
 x = [x['units1'] for x in table]
 y = [x['loss'] for x in table]
@@ -65,7 +67,7 @@ fig, ax = plt.subplots()
 space = module.space
 text = '\n' + nOE + "Best: " + best + '\n' + module.space_str + '\n'
 ax.margins(x=-0.001)
-ax.set_title(openF+'\n'+text, loc='left')
+ax.set_title(openF+header+text, loc='left')
 ax.set_xlabel(xaxe, fontsize=16)
 ax.set_ylabel("loss", fontsize=16)
 #ax.set_xticks(np.arange(0, 101, 10))

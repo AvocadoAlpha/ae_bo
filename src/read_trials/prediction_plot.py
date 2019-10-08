@@ -24,10 +24,10 @@ import sys
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
-
-batch_size = int(sys.argv[1]) #1000 #batch_size
-layer1 = int(sys.argv[2]) #30 #nodes
+x_train, x_val, x_test = utils.generate_data_micro()
+#print("medium")
+batch_size = 128#int(sys.argv[1]) #1000 #batch_size
+layer1 = 300#int(sys.argv[2]) #30 #nodes
 
 script_name = "batch_size="+str(batch_size)+"_units1="+str(layer1)
 
@@ -46,7 +46,7 @@ encoder = Model(input, enc)
 
 model.compile(loss='mean_squared_error', optimizer='adadelta')
 model.fit(x_train, x_train,
-                epochs=1,
+                epochs=100,
                 batch_size=batch_size,
                 shuffle=True,
                 validation_data = (x_val, x_val),
@@ -57,8 +57,9 @@ loss = tf.keras.backend.sum(mean_squared_error(tf.convert_to_tensor(x_test), tf.
 sess = tf.Session()
 loss = sess.run(loss)
 score =round(loss/(len(x_test)), 4)
-
+print("Prediction Score :" + str(score))
 print(model.summary())
+
 
 result = model.predict(x_test)
 

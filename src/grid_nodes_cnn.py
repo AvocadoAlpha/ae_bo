@@ -5,17 +5,20 @@ set_gpu(sys.argv)
 from keras.models import Model
 from keras.layers import Dense, Input
 from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials, space_eval
-from keras.losses import mean_squared_error, binary_crossentropy
+from keras.losses import mean_squared_error
 import tensorflow as tf
 from keras import backend as K
 from keras import regularizers
 import os
 import utils
+from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
+from keras.models import Model
+from keras import backend as K
 import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_test, x_val = utils.generate_data_tiny()
+x_train, x_val, x_test = utils.generate_data_cnn()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
@@ -23,14 +26,14 @@ print("test: ",len(x_test))
 # space for hyperopt to search quniform is discrete uniform (lower bound, upper bound, step) lower bound always zero whatever you set it
 # batch size is fixed could be changed anytime to quniform for example
 space = {
-    'units1': hp.quniform('units1', 0, 783, 7), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [30])
+    'units1': hp.quniform('units1', 0, 10000, 50), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'batch_size': hp.choice('batch_size', [128])
     }
 
 space_str = """
 space = {
-    'units1': hp.quniform('units1', 0, 783, 7), 
-    'batch_size': hp.choice('batch_size', [30])
+    'units1': hp.quniform('units1', 0, 10000, 10), 
+    'batch_size': hp.choice('batch_size', [128])
     }"""
 
 
@@ -51,15 +54,19 @@ def objective(params):
 
     #one hidden layer keras functional API
 
-    encoding_dim = layer1
+    input_img = Input(shape=(28, 28, 1))  # adapt this if using `channels_first` image data format
 
-    input_img = Input(shape=(784,))
-    # add a Dense layer with a L1 activity regularizer
-    encoded = Dense(encoding_dim, activation='relu')(input_img)
-    decoded = Dense(784, activation='sigmoid')(encoded)
+    x = Conv2D(16, (3, 3), activation='relu', padding='same')(input_img)
+    x = MaxPooling2D((2, 2), padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    encoded = MaxPooling2D((2, 2), padding='same')(x)
+
+    # at this point the representation is (4, 4, 8) i.e. 128-dimensional
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    x = UpSampling2D((2, 2))(x)
+    decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
     model = Model(input_img, decoded)
-
-    model.compile(loss='binary_crossentropy', optimizer='adadelta')
+    model.compile(loss='mean_squared_error', optimizer='adadelta')
     model.fit(x_train, x_train,
                     epochs=100,
                     batch_size=int(params['batch_size']),
@@ -68,7 +75,8 @@ def objective(params):
                     callbacks =utils.callback(script_name))
 
     preds = model.predict(x_test)
-    loss = tf.keras.backend.sum(binary_crossentropy(tf.convert_to_tensor(x_test), tf.convert_to_tensor(preds)))
+    loss_ = model.evaluate(x=x_test, y=preds)
+    loss = tf.keras.backend.sum(mean_squared_error(tf.convert_to_tensor(x_test), tf.convert_to_tensor(preds)))
     sess = tf.Session()
     loss = sess.run(loss)
     score = round(loss / (len(x_test)), 4)

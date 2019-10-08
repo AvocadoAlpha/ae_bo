@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
+x_train,  x_val, x_test = utils.generate_data_big()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
@@ -23,14 +23,14 @@ print("test: ",len(x_test))
 # space for hyperopt to search quniform is discrete uniform (lower bound, upper bound, step) lower bound always zero whatever you set it
 # batch size is fixed could be changed anytime to quniform for example
 space = {
-    'units1': hp.quniform('units1', 0, 783, 7), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [64])
+    'units1': hp.quniform('units1', 0, 5000, 25), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'batch_size': hp.choice('batch_size', [128])
     }
 
 space_str = """
 space = {
-    'units1': hp.quniform('units1', 0, 783, 7), 
-    'batch_size': hp.choice('batch_size', [64])
+    'units1': hp.quniform('units1', 0, 5000, 25), 
+    'batch_size': hp.choice('batch_size', [128])
     }"""
 
 
@@ -65,6 +65,7 @@ def objective(params):
                     callbacks =utils.callback(script_name))
 
     preds = model.predict(x_test)
+    #loss_ = model.evaluate(x=x_test, y=preds)
     loss = tf.keras.backend.sum(mean_squared_error(tf.convert_to_tensor(x_test), tf.convert_to_tensor(preds)))
     sess = tf.Session()
     loss = sess.run(loss)

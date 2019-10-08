@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
+x_train, x_val, x_test = utils.generate_data_tiny()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
@@ -56,7 +56,7 @@ def objective(params):
     input_img = Input(shape=(784,))
     # add a Dense layer with a L1 activity regularizer
     encoded = Dense(encoding_dim, activation='relu',
-                    activity_regularizer=regularizers.l1(10e-5))(input_img)
+                    activity_regularizer=regularizers.l1(10e-6))(input_img)
     decoded = Dense(784, activation='sigmoid')(encoded)
     model = Model(input_img, decoded)
 
