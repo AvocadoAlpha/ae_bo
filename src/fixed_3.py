@@ -16,7 +16,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_medium2()
+x_train, x_val, x_test = utils.generate_data_medium_2()
 
 space = {
     'units1': hp.quniform('units1', 0, 100, 4), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321

@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_medium2()
+x_train, x_val, x_test = utils.generate_data_medium_2()
 
 def node_params(n_layers):
     # define the parameters that are conditional on the number of layers here
