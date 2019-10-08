@@ -111,7 +111,8 @@ def fixed_5():
 
 
 options = { "grid_batch" : nodes_batch,
-            "grid_nodes" : nodes_batch,
+            "grid_nodes" :nodes_batch,
+            "grid_nodes_keras":nodes_batch,
             "greedy": nodes_batch,
             "greedy_b_n":nodes_batch,
             "greedy_2": nodes_batch,

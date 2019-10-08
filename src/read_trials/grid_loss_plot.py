@@ -9,7 +9,7 @@ from hyperopt import space_eval
 import utils
 
 
-openF = "fixed_5"#sys.argv[1]
+openF = "grid_nodes_keras"#sys.argv[1]
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
 init(openF)
@@ -69,7 +69,7 @@ ax.set_title(openF+'\n'+text, loc='left')
 ax.set_xlabel(xaxe, fontsize=16)
 ax.set_ylabel("loss", fontsize=16)
 #ax.set_xticks(np.arange(0, 101, 10))
-fig.set_size_inches(14, 12)
+fig.set_size_inches(12, 12)
 ax.scatter(x, y, s=12)
 plt.grid()
 #plt.tight_layout()
