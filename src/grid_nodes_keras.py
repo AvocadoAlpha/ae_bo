@@ -24,7 +24,7 @@ print("test: ",len(x_test))
 # batch size is fixed could be changed anytime to quniform for example
 space = {
     'units1': hp.quniform('units1', 0, 783, 7), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [256])
+    'batch_size': hp.choice('batch_size', [30])
     }
 
 space_str = """

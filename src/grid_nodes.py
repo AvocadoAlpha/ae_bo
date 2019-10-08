@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
+x_train, x_val, x_test = utils.generate_data_medium_2()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
@@ -24,13 +24,13 @@ print("test: ",len(x_test))
 # batch size is fixed could be changed anytime to quniform for example
 space = {
     'units1': hp.quniform('units1', 0, 783, 7), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [30])
+    'batch_size': hp.choice('batch_size', [64])
     }
 
 space_str = """
 space = {
     'units1': hp.quniform('units1', 0, 783, 7), 
-    'batch_size': hp.choice('batch_size', [30])
+    'batch_size': hp.choice('batch_size', [64])
     }"""
 
 

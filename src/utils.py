@@ -32,6 +32,22 @@ def generate_data_big():
     x_test = x_test[:-5000]
     return x_train, x_test, x_val
 
+def generate_data_medium_2():
+    (x_train,_), (x_test,_) = mnist.load_data()
+    x_train = x_train.astype('float32') / 255.
+    x_test = x_test.astype('float32') / 255.
+    x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
+    x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
+    noise_factor = 0.0
+    x_train = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
+    x_test = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
+    x_train = np.clip(x_train, 0., 1.).astype('float32')
+    x_test = np.clip(x_test, 0., 1.).astype('float32')
+    x_val = x_train[10000:11000]
+    x_train = x_train[0:10000]
+    x_test = x_test[11000:12000]
+    return x_train, x_test, x_val
+
 def generate_data_medium():
     (x_train,_), (x_test,_) = mnist.load_data()
     x_train = x_train.astype('float32') / 255.
@@ -47,6 +63,7 @@ def generate_data_medium():
     x_train = x_train[0:5000]
     x_test = x_test[5500:6000]
     return x_train, x_test, x_val
+
 
 
 def generate_data_small():
