@@ -22,7 +22,7 @@ def node_params(n_layers):
     # in this case the number of nodes in each layer
     params = {}
     for n in range(n_layers):
-        params['n_nodes_layer_{}'.format(n)] = hp.quniform('n_nodes_{}_{}'.format(n_layers, n), 0, 100, 4)
+        params['n_nodes_layer_{}'.format(n)] = hp.uniform('n_nodes_{}_{}'.format(n_layers, n), 0, 1)
     return params
 
 # list of the number of layers you want to consider
@@ -54,7 +54,7 @@ def objective(params):
     print('Params testing: ', params)
     print('\n ')
 
-    layersAndNodes = [x/100 for x in list(params['choice'].values())] # len is number of layers
+    layersAndNodes = [x for x in list(params['choice'].values())] # len is number of layers
 
 
     input = Input(shape=(784,))

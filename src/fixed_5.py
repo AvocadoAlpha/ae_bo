@@ -17,18 +17,18 @@ script_name = os.path.basename(__file__).split('.')[0]
 x_train, x_val, x_test = utils.generate_data_small()
 
 space = {
-    'units1': hp.quniform('units1', 0, 100, 10), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'units2': hp.quniform('units2', 0, 100, 10), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'units3': hp.quniform('units3', 0, 100, 10), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'batch_size': hp.choice('batch_size', [256])
+    'units1': hp.uniform('units1', 0, 1),
+    'units2': hp.uniform('units2', 0, 1),
+    'units3': hp.uniform('units3', 0, 1),
+    'batch_size': hp.choice('batch_size', [128])
     }
 
 space_str = """
 space = {
-    'units1': hp.quniform('units1', 0, 100, 10), 
-    'units2': hp.quniform('units2', 0, 100, 10), 
-    'units3': hp.quniform('units3', 0, 100, 10), 
-    'batch_size': hp.choice('batch_size', [256])
+    'units1': hp.quniform('units1', 0, 1), 
+    'units2': hp.quniform('units2', 0, 1), 
+    'units3': hp.quniform('units3', 0, 1), 
+    'batch_size': hp.choice('batch_size', [128])
     }"""
 
 
@@ -45,9 +45,9 @@ def objective(params):
     print('\n ')
 
 
-    layer1 = int(np.ceil(params['units1']/100 * 784))
-    layer2 = int(np.ceil(params['units2']/100 * layer1))
-    layer3 = int(np.ceil(params['units3']/100 * layer2))
+    layer1 = int(np.ceil(params['units1'] * 784))
+    layer2 = int(np.ceil(params['units2'] * layer1))
+    layer3 = int(np.ceil(params['units3'] * layer2))
 
     input = Input(shape=(784,))
     enc = Dense(layer1, activation='relu')(input)
@@ -83,4 +83,4 @@ def objective(params):
 # loop indefinitely and stop whenever you like
 if __name__ == "__main__":
     while True:
-        utils.run_trials_grid_2(script_name, space, objective)
+        utils.run_trials(script_name, space, objective)
