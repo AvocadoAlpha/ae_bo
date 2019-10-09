@@ -13,14 +13,15 @@ import os
 import utils
 import inspect
 import numpy as np
+from keras import regularizers
 
 script_name = os.path.basename(__file__).split('.')[0]
 
 x_train, x_val, x_test = utils.generate_data_medium_2()
 
 space = {
-    'units1': hp.uniform('units1', 0, 1), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
-    'units2': hp.uniform('units2', 0, 1), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'units1': hp.quniform('units1', 0, 100, 20), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'units2': hp.uniform('units2', 0, 100, 20), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
     'batch_size': hp.choice('batch_size', [128])
     }
 
@@ -44,13 +45,13 @@ def objective(params):
     print('\n ')
 
 
-    layer1 = int(np.ceil(params['units1'] * 784))
-    layer2 = int(np.ceil(params['units2'] * layer1))
+    layer1 = int(np.ceil(params['units1']/100 * 784))
+    layer2 = int(np.ceil(params['units2']/100 * layer1))
 
     input = Input(shape=(784,))
-    enc = Dense(layer1, activation='relu')(input)
-    enc2 = Dense(layer2, activation='relu')(enc)
-    dec1 = Dense(layer1, activation='relu')(enc2)
+    enc = Dense(layer1, activation='relu',activity_regularizer=regularizers.l1(0.01))(input)
+    enc2 = Dense(layer2, activation='relu',activity_regularizer=regularizers.l1(0.01))(enc)
+    dec1 = Dense(layer1, activation='relu',activity_regularizer=regularizers.l1(0.01))(enc2)
     dec2 = Dense(784, activation='sigmoid')(dec1)
     model = Model(input, dec2)
 
@@ -79,4 +80,4 @@ def objective(params):
 # loop indefinitely and stop whenever you like
 if __name__ == "__main__":
     while True:
-        utils.run_trials(script_name, space, objective)
+        utils.run_trials_grid_2(script_name, space, objective)

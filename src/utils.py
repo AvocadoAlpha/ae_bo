@@ -59,7 +59,7 @@ def generate_data_medium_2():
     x_test = np.clip(x_test, 0., 1.).astype('float32')
     x_val = x_train[-1000:]
     x_train = x_train[:10000]
-    x_test = x_test[:-1000]
+    x_test = x_test[:2000]
     return x_train, x_val, x_test
 
 def generate_data_medium():

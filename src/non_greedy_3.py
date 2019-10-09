@@ -11,6 +11,7 @@ from keras import backend as K
 import numpy as np
 import os
 import utils
+from keras import regularizers
 import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
@@ -22,7 +23,7 @@ def node_params(n_layers):
     # in this case the number of nodes in each layer
     params = {}
     for n in range(n_layers):
-        params['n_nodes_layer_{}'.format(n)] = hp.uniform('n_nodes_{}_{}'.format(n_layers, n), 0, 1)
+        params['n_nodes_layer_{}'.format(n)] = hp.quniform('n_nodes_{}_{}'.format(n_layers, n), 0, 100, 20)
     return params
 
 # list of the number of layers you want to consider
@@ -54,7 +55,7 @@ def objective(params):
     print('Params testing: ', params)
     print('\n ')
 
-    layersAndNodes = [x for x in list(params['choice'].values())] # len is number of layers
+    layersAndNodes = [x/100 for x in list(params['choice'].values())] # len is number of layers
 
 
     input = Input(shape=(784,))
@@ -67,7 +68,7 @@ def objective(params):
     for x in layersAndNodes:
         next_layer = int(np.ceil(x * next_layer))
         output_layers.append(next_layer)
-        enc = Dense(next_layer, activation='relu')(prev_layer)
+        enc = Dense(next_layer, activation='relu',activity_regularizer=regularizers.l1(0.01))(prev_layer)
         prev_layer = enc
 
 
@@ -104,4 +105,4 @@ def objective(params):
 # loop indefinitely and stop whenever you like
 if __name__ == "__main__":
     while True:
-        utils.run_trials(script_name, space, objective)
+        utils.run_trials_grid_2(script_name, space, objective)
