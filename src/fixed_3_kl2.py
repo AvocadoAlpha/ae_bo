@@ -50,7 +50,7 @@ def objective(params):
 
     input = Input(shape=(784,))
     enc = Dense(layer1, activation='relu',kernel_regularizer=regularizers.l2(0.001))(input)
-    enc2 = Dense(layer2, activation='relu',kernel_regularizer=regu.l2(0.001))(enc)
+    enc2 = Dense(layer2, activation='relu',kernel_regularizer=regularizers.l2(0.001))(enc)
     dec1 = Dense(layer1, activation='relu',kernel_regularizer=regularizers.l2(0.001))(enc2)
     dec2 = Dense(784, activation='sigmoid')(dec1)
     model = Model(input, dec2)
