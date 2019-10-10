@@ -7,9 +7,16 @@ import matplotlib.pyplot as plt
 from list_best_performers import options, init
 from hyperopt import space_eval
 import utils
+# This import registers the 3D projection, but is otherwise unused.
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import numpy as np
 
 
-openF = "non_greedy_3"#sys.argv[1]
+openF = "fixed_3_2"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
@@ -48,14 +55,9 @@ table, n = options[openF]()
 #sorted_table = sorted(table, key=lambda k: k['batch_size'])
 
 
-x = [x[xaxe] for x in table] #populate graph!
+x = [x["units1"] for x in table] #populate graph!
+z = [x["units2"] for x in table]
 y = [x['loss'] for x in table]
-"""
-x = [x['units1'] for x in table]
-y = [x['loss'] for x in table]
-"""
-
-
 
 
 from datetime import datetime
@@ -63,23 +65,36 @@ total_seconds = (datetime.fromtimestamp(amax) - res[0]['book_time']).total_secon
 total_time = "Total Time in hours :" + str((total_seconds/60)/60) + '\n'
 nOE = total_time + "Number of Evaluations :" + str(len(trials.trials)) + '\n'
 best = str(my_space_eval(trials.best_trial['misc']['vals']))+" Result :"+str(trials.best_trial['result'])
-fig, ax = plt.subplots()
 space = module.space
 text = '\n' + nOE + "Best: " + best + '\n' + module.space_str + '\n'
-ax.margins(x=-0.001)
-ax.set_title(openF+header+text, loc='left')
-ax.set_xlabel(xaxe, fontsize=16)
-ax.set_ylabel("loss", fontsize=16)
-#ax.set_xticks(np.arange(0, 101, 10))
-fig.set_size_inches(12, 12)
-ax.scatter(x, y, s=12)
-plt.grid()
-#plt.tight_layout()
 
-"""
-for i, txt in enumerate(n):
-    ax.annotate(txt, (x[i], y[i]), textcoords="offset points", xytext=(0, 4), ha='center') # horizontal alignment can be left, right or center)
-"""
-fig.savefig('../../plots/grid-loss-plot/'+str(openF)+'.png', dpi=200, bbox_inches="tight", pad_inches=1)
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+ax.set_title(openF+header+text, loc='left')
+
+# Make data.
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+R = np.sqrt(X**2 + Y**2)
+Z = np.sin(R)
+
+
+
+ax.invert_yaxis()
+
+
+surf = ax.plot_trisurf(x, z, y, cmap=cm.coolwarm,
+                       linewidth=0, antialiased=False)
+
+ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+
+# Add a color bar which maps values to colors.
+fig.colorbar(surf, shrink=0.5, aspect=5)
+
+
+fig.savefig('../../plots/grid-loss-plot3d/'+str(openF)+'.png', dpi=200, bbox_inches="tight", pad_inches=1)
 plt.show()
 print("Figure saved in figures/")

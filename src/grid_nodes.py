@@ -15,7 +15,7 @@ import numpy as np
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train,  x_val, x_test = utils.generate_data_big()
+x_train,  x_val, x_test = utils.generate_data_medium_2()
 print("train: ",len(x_train))
 print("val: ",len(x_val))
 print("test: ",len(x_test))
@@ -23,7 +23,7 @@ print("test: ",len(x_test))
 # space for hyperopt to search quniform is discrete uniform (lower bound, upper bound, step) lower bound always zero whatever you set it
 # batch size is fixed could be changed anytime to quniform for example
 space = {
-    'units1': hp.quniform('units1', 0, 5000, 25), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'units1': hp.quniform('units1', 0, 784, 10), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
     'batch_size': hp.choice('batch_size', [128])
     }
 
@@ -58,11 +58,9 @@ def objective(params):
 
     model.compile(loss='mean_squared_error', optimizer='adadelta')
     model.fit(x_train, x_train,
-                    epochs=100,
+                    epochs=50,
                     batch_size=int(params['batch_size']),
-                    shuffle=True,
-                    validation_data = (x_val, x_val),
-                    callbacks =utils.callback(script_name))
+                    shuffle=True)
 
     preds = model.predict(x_test)
     #loss_ = model.evaluate(x=x_test, y=preds)
