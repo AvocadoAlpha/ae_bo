@@ -1,4 +1,5 @@
-import os
+import sys
+from utils import set_gpu
 from utils import set_gpu
 import sys
 set_gpu(sys.argv)
@@ -10,28 +11,29 @@ import tensorflow as tf
 from keras import backend as K
 import os
 import utils
+import inspect
 import numpy as np
+from keras import regularizers
 
 script_name = os.path.basename(__file__).split('.')[0]
 
-x_train, x_val, x_test = utils.generate_data_small()
-
+x_train, x_val, x_test = utils.generate_data_medium_2()
 
 space = {
-    'units1': hp.quniform('units1', 0, 783, 1),
-    'batch_size': hp.quniform('batch_size', 0, 1024, 1)
+    'units1': hp.quniform('units1', 0, 100, 5), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'units2': hp.quniform('units2', 0, 100, 5), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'batch_size': hp.choice('batch_size', [128])
     }
 
-
-
-space_str = """space = {
-    'units1': hp.quniform('units1', 0, 783, 20),
-    'batch_size': hp.quniform('batch_size', 0, 1024, 15)
+space_str = """
+space = {
+    'units1': hp.quniform('units1', 0, 100, 5), 
+    'units2': hp.quniform('units2', 0, 100, 5),
+    'batch_size': hp.choice('batch_size', [128])
     }"""
 
 
 def objective(params):
-
 
     for x in params.keys():
         if params[x] == 0:
@@ -39,17 +41,19 @@ def objective(params):
 
     K.clear_session()
 
-    print('Params testing: ', params)
+    print('Params tested: ', params)
     print('\n ')
 
 
-    layer1 = int(params['units1'])
-
+    layer1 = int(np.ceil(params['units1']/100 * 784))
+    layer2 = int(np.ceil(params['units2']/100 * layer1))
 
     input = Input(shape=(784,))
     enc = Dense(layer1, activation='relu')(input)
-    dec = Dense(784, activation='sigmoid')(enc)
-    model = Model(input, dec)
+    enc2 = Dense(layer2, activation='relu',activity_regularizer=regularizers.l1(0.00001))(enc)
+    dec1 = Dense(layer1, activation='relu')(enc2)
+    dec2 = Dense(784, activation='sigmoid')(dec1)
+    model = Model(input, dec2)
 
     model.compile(loss='mean_squared_error', optimizer='adadelta')
     model.fit(x_train, x_train,
@@ -64,7 +68,7 @@ def objective(params):
     sess = tf.Session()
     score =round(sess.run(loss)/len(x_test), 4)
 
-    print('Params tested: ', params)
+    print('Params testing: ', params)
     print('\n ')
     print(model.summary())
     return {'loss': score, 'status': STATUS_OK}
