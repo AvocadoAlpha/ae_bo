@@ -16,7 +16,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 
 
-openF = "fixed_3_l1_t"#sys.argv[1]
+openF = "fixed_3_l1_a_t"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
@@ -81,7 +81,7 @@ ax.invert_yaxis()
 ax.set_xlabel("units1")
 ax.set_ylabel("units2")
 ax.set_zlabel("loss")
-ax.set_zlim([0.017, 0.021])
+#ax.set_zlim([0.017, 0.021])
 
 surf = ax.plot_trisurf(x, z, y, cmap=cm.coolwarm,
                        linewidth=0, antialiased=True)

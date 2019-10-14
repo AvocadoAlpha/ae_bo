@@ -139,6 +139,17 @@ options = { "grid_batch" : nodes_batch,
             "fixed_5": fixed_5,
             "non_greedy_3": non_greedy,
             "non_greedy_5": non_greedy,
+            "fixed_3_l1_a_3": fixed_3,
+            "fixed_3_l1_a_s": fixed_3,
+            "fixed_3_l1_a_t": fixed_3,
+            "fixed_3_l1_k_3": fixed_3,
+            "fixed_3_l1_k_s": fixed_3,
+            "fixed_3_l2_a_3": fixed_3,
+            "fixed_3_l2_a_s": fixed_3,
+            "fixed_3_l2_a_t": fixed_3,
+            "fixed_3_l2_k_3": fixed_3,
+            "fixed_3_l2_k_s": fixed_3,
+            "fixed_3_l2_t": fixed_3,
             }
 
 
