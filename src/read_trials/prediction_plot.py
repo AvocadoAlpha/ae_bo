@@ -27,8 +27,8 @@ script_name = os.path.basename(__file__).split('.')[0]
 x_train, x_val, x_test = utils.generate_data_medium_2()
 #print("medium")
 batch_size = 128#int(sys.argv[1]) #1000 #batch_size
-layer1 = 700#int(sys.argv[2]) #30 #nodes
-layer2 = 700#int(sys.argv[2]) #30 #nodes
+layer1 = 160#int(sys.argv[2]) #30 #nodes
+layer2 = 130#int(sys.argv[2]) #30 #nodes
 
 script_name = "batch_size="+str(batch_size)+"_units1="+str(layer1)
 
@@ -40,9 +40,9 @@ K.clear_session()
 
 
 input = Input(shape=(784,))
-enc = Dense(layer1, activation='relu')(input)
+enc = Dense(layer1, activation='relu',kernel_regularizer=regularizers.l1(0.00001))(input)
 enc2 = Dense(layer2, activation='relu',kernel_regularizer=regularizers.l1(0.00001))(enc)
-dec1 = Dense(layer1, activation='relu')(enc2)
+dec1 = Dense(layer1, activation='relu',kernel_regularizer=regularizers.l1(0.00001))(enc2)
 dec2 = Dense(784, activation='sigmoid')(dec1)
 model = Model(input, dec2)
 

@@ -150,6 +150,10 @@ options = { "grid_batch" : nodes_batch,
             "fixed_3_l2_k_3": fixed_3,
             "fixed_3_l2_k_s": fixed_3,
             "fixed_3_l2_t": fixed_3,
+            "fixed_3_l1_k_s_3": fixed_3,
+            "fixed_3_l1_a_t_3": fixed_3,
+            "fixed_3_l2_a_m": fixed_3,
+            "fixed_3_l2_a_b": fixed_3,
             }
 
 
