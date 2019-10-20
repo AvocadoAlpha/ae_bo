@@ -16,7 +16,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 
 
-openF = "fixed_3_l2_a_b"#sys.argv[1]
+openF = "fixed_3_l1_k_3"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)

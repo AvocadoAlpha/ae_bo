@@ -27,8 +27,8 @@ script_name = os.path.basename(__file__).split('.')[0]
 x_train, x_val, x_test = utils.generate_data_medium_2()
 #print("medium")
 batch_size = 128#int(sys.argv[1]) #1000 #batch_size
-layer1 = 160#int(sys.argv[2]) #30 #nodes
-layer2 = 130#int(sys.argv[2]) #30 #nodes
+layer1 = 55#int(sys.argv[2]) #30 #nodes
+layer2 = 50#int(sys.argv[2]) #30 #nodes
 
 script_name = "batch_size="+str(batch_size)+"_units1="+str(layer1)
 
