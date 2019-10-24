@@ -14,6 +14,8 @@ import utils
 import inspect
 import numpy as np
 from keras import regularizers
+from hyperopt import base
+#base.have_bson = False
 
 script_name = os.path.basename(__file__).split('.')[0]
 

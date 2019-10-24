@@ -9,14 +9,14 @@ from hyperopt import space_eval
 import utils
 # This import registers the 3D projection, but is otherwise unused.
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 
-
-openF = "fixed_3_l1_k_3"#sys.argv[1]
+matplotlib.use("TkAgg")
+openF = "fixed_3_l1_k_s_3"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
@@ -93,6 +93,6 @@ ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 fig.colorbar(surf, shrink=0.2, aspect=2)
 
 
-fig.savefig('../../plots/grid-loss-plot3d/'+str(openF)+'.png', dpi=200, bbox_inches="tight", pad_inches=1)
+fig.savefig('../../plots/grid-loss-plot3d/'+str(openF)+'.png')
 plt.show()
 print("Figure saved in figures/")
