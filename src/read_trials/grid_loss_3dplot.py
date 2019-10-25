@@ -9,14 +9,17 @@ from hyperopt import space_eval
 import utils
 # This import registers the 3D projection, but is otherwise unused.
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-
+import matplotlib
+matplotlib.use("tkAGG")
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
 
-openF = "fixed_3_l1_k_3"#sys.argv[1]
+openF ="fixed_3_l1_a_t_new"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
@@ -59,6 +62,13 @@ x = [x["units1"] for x in table] #populate graph!
 z = [x["units2"] for x in table]
 y = [x['loss'] for x in table]
 
+df = pd.DataFrame.from_dict(np.array([x,z,y]).T)
+df.columns = ['units1','units2','loss']
+df['loss'] = pd.to_numeric(df['loss'])
+pivotted= df.pivot('units1','units2','loss')
+sns.heatmap(pivotted,cmap='ocean')
+
+
 
 from datetime import datetime
 total_seconds = (datetime.fromtimestamp(amax) - res[0]['book_time']).total_seconds()
@@ -83,7 +93,7 @@ ax.set_ylabel("units2")
 ax.set_zlabel("loss")
 #ax.set_zlim([0.017, 0.021])
 
-surf = ax.plot_trisurf(x, z, y, cmap=cm.coolwarm,
+surf = ax.plot_trisurf(x, z, y, cmap=cm.ocean,
                        linewidth=0, antialiased=True)
 
 ax.zaxis.set_major_locator(LinearLocator(10))
