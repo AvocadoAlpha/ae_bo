@@ -20,13 +20,13 @@ script_name = os.path.basename(__file__).split('.')[0]
 x_train, x_val, x_test = utils.generate_data_medium_2()
 
 space = {
-    'units1': hp.quniform('units1', 0, 2000, 50), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
+    'units1': hp.quniform('units1', 0, 2000, 100), #implementation of hq.uniform is weird see github.com/hyperopt/hyperopt/issues/321
     'batch_size': hp.choice('batch_size', [128])
     }
 
 space_str = """
 space = {
-    'units1': hp.quniform('units1', 0, 2000, 50), 
+    'units1': hp.quniform('units1', 0, 2000, 100), 
     'batch_size': hp.choice('batch_size', [128])
     }"""
 
@@ -47,7 +47,7 @@ def objective(params):
 
 
     input = Input(shape=(784,))
-    enc = Dense(layer1, activation='relu', activity_regularizer=regularizers.l1(0.000001))(input)
+    enc = Dense(layer1, activation='relu', activity_regularizer=regularizers.l1(0.00001))(input)
     dec2 = Dense(784, activation='sigmoid')(enc)
     model = Model(input, dec2)
 
