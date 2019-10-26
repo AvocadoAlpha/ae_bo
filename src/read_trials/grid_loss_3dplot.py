@@ -19,7 +19,7 @@ import pandas as pd
 import seaborn as sns
 
 
-openF ="fixed_3_l1_a_t_3_new"#sys.argv[1]
+openF ="fixed_3_l1_a_t_new"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)

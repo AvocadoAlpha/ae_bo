@@ -80,6 +80,6 @@ plt.grid()
 for i, txt in enumerate(n):
     ax.annotate(txt, (x[i], y[i]), textcoords="offset points", xytext=(0, 4), ha='center') # horizontal alignment can be left, right or center)
 """
-fig.savefig('../../plots/grid-loss-plot/'+str(openF)+'.png', dpi=200, bbox_inches="tight")
+fig.savefig('../../plots/grid-loss-plot/'+str(openF)+'.png', dpi=200, bbox_inches="tight", pad_inches=1)
 plt.show()
 print("Figure saved in figures/")
