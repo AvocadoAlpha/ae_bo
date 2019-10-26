@@ -9,7 +9,7 @@ from hyperopt import space_eval
 import utils
 
 
-openF = "fixed_3_l2_2"#sys.argv[1]
+openF = "grid_nodes_2"#sys.argv[1]
 
 xaxe = "units1"#sys.argv[2]
 module = importlib.import_module(openF)
@@ -80,6 +80,6 @@ plt.grid()
 for i, txt in enumerate(n):
     ax.annotate(txt, (x[i], y[i]), textcoords="offset points", xytext=(0, 4), ha='center') # horizontal alignment can be left, right or center)
 """
-fig.savefig('../../plots/grid-loss-plot/'+str(openF)+'.png', dpi=200, bbox_inches="tight", pad_inches=1)
+fig.savefig('../../plots/grid-loss-plot/'+str(openF)+'.png', dpi=200, bbox_inches="tight")
 plt.show()
 print("Figure saved in figures/")
